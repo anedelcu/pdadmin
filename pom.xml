@@ -30,6 +30,12 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.26</version> <!-- Adjust version as needed -->
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
