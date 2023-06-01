@@ -10,4 +10,8 @@ public interface UserService {
     List<User> findAll();
 
     Long addUser(User user);
+
+    Integer addUsers(List<User> users);
+
+    boolean updateUser(Long userId, User updatedUser);
 }
