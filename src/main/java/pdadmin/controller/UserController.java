@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pdadmin.dao.UserDAO;
+import pdadmin.error.ErrorEnums;
 import pdadmin.model.User;
 import pdadmin.repo.UserRepository;
 import pdadmin.service.UserService;
@@ -16,20 +17,18 @@ import java.util.List;
 @RequestMapping
 public class UserController {
 
-    //TODO
-    @Autowired
-    UserService userService;
+    // TODO
+    @Autowired private UserService userService;
 
     @GetMapping("/role")
-    public ResponseEntity<UserDAO> getUserRole(@RequestParam (name = "userId", required = false) long id) {
+    public ResponseEntity<UserDAO> getUserRole(
+            @RequestParam(name = "userId", required = false) long id) {
         UserDAO userDAO = userService.getUserRole(id);
-        System.out.println("in here");
         if (userDAO == null || userDAO.getRole() == null || userDAO.getRole().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<UserDAO>(userDAO,HttpStatus.OK);
-
+        return new ResponseEntity<UserDAO>(userDAO, HttpStatus.OK);
     }
 
     @GetMapping("/users")
@@ -43,6 +42,7 @@ public class UserController {
         Long id = userService.addUser(user);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
+
     @PostMapping("/users/add")
     public ResponseEntity<Integer> addUsers(@RequestBody List<User> users) {
         Integer countUsersAdded = userService.addUsers(users);
@@ -50,16 +50,15 @@ public class UserController {
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User updatedUser) {
+    public ResponseEntity<String> updateUser(
+            @PathVariable Long userId, @RequestBody User updatedUser) {
         boolean isUpdated = userService.updateUser(userId, updatedUser);
-        if(isUpdated) {
-            String success = "User updated successfully";
+        if (isUpdated) {
+            String success = ErrorEnums.ErrorCode.USER_SUCCESS.getMessage();
             return new ResponseEntity<>(success, HttpStatus.OK);
-        }
-        else {
-            String error = "User not found";
+        } else {
+            String error = ErrorEnums.ErrorCode.USER_NOT_FOUND.getMessage();
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
     }
-
 }

@@ -16,6 +16,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     @Resource UserRepository userRepository;
+    //TODO Add log4j, and add logs.info in the methods, log.warn and log.error
+    //Do some research when you have to add each of them
 
 
     @Override
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
                 userDAO = new UserDAO(userId, role);
             }
         } catch (UserNotFoundException e) {
+            // log.error .... dont print stack trace
             e.printStackTrace();
         }
         return userDAO;
@@ -35,8 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        List<User> userList = userRepository.findAll();
-        return userList;
+        return userRepository.findAll();
     }
 
     @Override
