@@ -43,6 +43,23 @@ public class UserController {
         Long id = userService.addUser(user);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
+    @PostMapping("/users/add")
+    public ResponseEntity<Integer> addUsers(@RequestBody List<User> users) {
+        Integer countUsersAdded = userService.addUsers(users);
+        return new ResponseEntity<>(countUsersAdded, HttpStatus.CREATED);
+    }
 
+    @PutMapping("/users/{userId}")
+    public ResponseEntity<String> updateUser(@PathVariable Long userId, @RequestBody User updatedUser) {
+        boolean isUpdated = userService.updateUser(userId, updatedUser);
+        if(isUpdated) {
+            String success = "User updated successfully";
+            return new ResponseEntity<>(success, HttpStatus.OK);
+        }
+        else {
+            String error = "User not found";
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+    }
 
 }
