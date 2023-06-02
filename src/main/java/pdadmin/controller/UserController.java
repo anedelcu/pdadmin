@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import pdadmin.dao.UserDAO;
 import pdadmin.error.ErrorEnums;
 import pdadmin.model.User;
-import pdadmin.repo.UserRepository;
 import pdadmin.service.UserService;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
@@ -33,14 +32,24 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
-        List<User> userList = userService.findAll();
+        try {List<User> userList = userService.findAll();
         return new ResponseEntity<>(userList, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/user/add")
     public ResponseEntity<Long> addUser(@RequestBody User user) {
-        Long id = userService.addUser(user);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+        try{
+            Long id = userService.addUser(user);
+            return new ResponseEntity<>(id, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/users/add")
