@@ -185,4 +185,29 @@ class UserControllerTest {
         assertEquals(0, response.getBody());
     }
 
+    @Test
+    void testDeleteUser_UserFound_ReturnsSuccess () {
+        User user = new User(1L, "John", "Doe", "john@email.com", "2000-11-01", "DOCTOR");
+
+        Mockito.when(userService.deleteUser(user.getId())).thenReturn(true);
+
+        ResponseEntity<String> response = userController.deleteUser(user.getId());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("User deleted", response.getBody());
+    }
+
+    @Test
+    void testDeleteUser_UserNoTFound_ReturnsNotFound () {
+        User user = new User();
+
+        Long userId = user.getId();
+        Mockito.when(userService.deleteUser(user.getId())).thenReturn(false);
+
+        ResponseEntity<String> response = userController.deleteUser(user.getId());
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("User not found", response.getBody());
+    }
+
 }
