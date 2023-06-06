@@ -100,4 +100,15 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
+
+    @Override
+    public boolean deleteUser(Long userId) {
+
+        User user = userRepository.findById(userId);
+        if(user == null) {
+            return false;
+        }
+        userRepository.delete(user);
+        return true;
+    }
 }

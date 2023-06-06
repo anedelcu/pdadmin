@@ -70,4 +70,17 @@ public class UserController {
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
     }
+
+    @DeleteMapping("users/delete/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+
+        boolean isDeleted = userService.deleteUser(userId);
+        if(isDeleted) {
+            String success = ErrorEnums.ErrorCode.USER_DELETED.getMessage();
+            return new ResponseEntity<>(success, HttpStatus.OK);
+        }else {
+            String error = ErrorEnums.ErrorCode.USER_NOT_FOUND.getMessage();
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+    }
 }
